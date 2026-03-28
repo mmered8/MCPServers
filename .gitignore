@@ -35,3 +35,14 @@ htmlcov/
 
 # Build
 *.whl
+
+# Local-only (hardcoded paths, not portable)
+start-server.bat
+start-server.sh
+.mcp.json
+.claude/
+
+# Internal docs (not for customers)
+multi-project-coordinator-review.md
+BUILD_SPEC.md
+CLAUDE.md
