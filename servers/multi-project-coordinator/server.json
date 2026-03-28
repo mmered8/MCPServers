@@ -1,0 +1,30 @@
+{
+  "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
+  "name": "io.github.mmered8/multi-project-coordinator",
+  "title": "Multi-Project Coordinator",
+  "description": "Manage multiple repos from a single Claude Code session. Track dashboards, tasks, logs, and pipelines across projects.",
+  "repository": {
+    "url": "https://github.com/mmered8/MCPServers",
+    "source": "github"
+  },
+  "version": "0.1.0",
+  "packages": [
+    {
+      "registryType": "pypi",
+      "identifier": "multi-project-coordinator",
+      "version": "0.1.0",
+      "transport": {
+        "type": "stdio"
+      },
+      "environmentVariables": [
+        {
+          "description": "Path to the directory containing your projects/ and ideation/ folders",
+          "isRequired": true,
+          "format": "string",
+          "isSecret": false,
+          "name": "PROJECTS_ROOT"
+        }
+      ]
+    }
+  ]
+}

@@ -126,3 +126,5 @@ your-projects/
 ## License
 
 MIT License. See [LICENSE](LICENSE).
+
+<!-- mcp-name: io.github.mmered8/multi-project-coordinator -->
