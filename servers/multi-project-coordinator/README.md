@@ -1,8 +1,13 @@
 # Multi-Project Coordinator MCP Server
 
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
+[![Python 3.10+](https://img.shields.io/badge/python-3.10+-green.svg)](https://www.python.org/downloads/)
+[![Tests: 19 passing](https://img.shields.io/badge/tests-19%20passing-brightgreen.svg)](#)
+[![Transport: streamable-http](https://img.shields.io/badge/transport-streamable--http-purple.svg)](https://spec.modelcontextprotocol.io/)
+
 Manage multiple repos from a single Claude Code session. Track projects, enforce workflows, search across codebases.
 
-**$29/mo on [MCPize](https://mcpize.com)**
+**$9/mo on [MCPize](https://mcpize.com)**
 
 ## Why This Exists
 

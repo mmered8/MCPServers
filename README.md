@@ -1,12 +1,16 @@
 # MCPServers
 
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](servers/multi-project-coordinator/LICENSE)
+[![Python 3.10+](https://img.shields.io/badge/python-3.10+-green.svg)](https://www.python.org/downloads/)
+[![MCP SDK](https://img.shields.io/badge/MCP-streamable--http-purple.svg)](https://spec.modelcontextprotocol.io/)
+
 Paid MCP (Model Context Protocol) servers for the [MCPize](https://mcpize.com) marketplace. Each server extends AI coding tools (Claude Code, Cursor, etc.) with custom capabilities.
 
 All servers use **streamable-http** transport by default (the MCPize production standard).
 
 ## Servers
 
-### Multi-Project Coordinator ($29/mo)
+### Multi-Project Coordinator ($9/mo)
 
 Cross-repo project state management. Track dashboards, tasks, logs, and pipelines across all your repos from a single AI session.
 

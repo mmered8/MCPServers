@@ -7,7 +7,7 @@ Multi-Project Coordinator MCP Server
 Manage multiple repos from a single Claude Code session. Track projects, enforce workflows, search across codebases.
 
 ## Price
-$29/month
+$9/month
 
 ## Description
 
