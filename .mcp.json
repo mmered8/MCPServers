@@ -1,9 +1,0 @@
-{
-  "mcpServers": {
-    "master-plan": {
-      "command": "uv",
-      "args": ["run", "python", "mcp_server.py"],
-      "cwd": "c:\\Users\\mason\\OneDrive\\Documents\\GitHub\\Master_Plan"
-    }
-  }
-}
