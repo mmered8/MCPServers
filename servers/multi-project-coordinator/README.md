@@ -7,7 +7,7 @@
 
 Manage multiple repos from a single Claude Code session. Track projects, enforce workflows, search across codebases.
 
-**$9/mo on [MCPize](https://mcpize.com)**
+**Free & Open Source** | MIT Licensed
 
 ## Why This Exists
 

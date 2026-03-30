@@ -4,13 +4,13 @@
 [![Python 3.10+](https://img.shields.io/badge/python-3.10+-green.svg)](https://www.python.org/downloads/)
 [![MCP SDK](https://img.shields.io/badge/MCP-streamable--http-purple.svg)](https://spec.modelcontextprotocol.io/)
 
-Paid MCP (Model Context Protocol) servers for the [MCPize](https://mcpize.com) marketplace. Each server extends AI coding tools (Claude Code, Cursor, etc.) with custom capabilities.
+MCP (Model Context Protocol) servers that extend AI coding tools (Claude Code, Cursor, etc.) with custom capabilities.
 
 All servers use **streamable-http** transport by default (the MCPize production standard).
 
 ## Servers
 
-### Multi-Project Coordinator ($9/mo)
+### Multi-Project Coordinator (Free & Open Source)
 
 Cross-repo project state management. Track dashboards, tasks, logs, and pipelines across all your repos from a single AI session.
 
@@ -62,5 +62,5 @@ See [servers/multi-project-coordinator/README.md](servers/multi-project-coordina
 ### Grok API Wrapper ($19/mo)
 *Coming soon* — Unified interface to Grok Chat, Imagine, and Collections API with cost tracking and caching.
 
-### Landlord Financial ($49/mo)
-*Coming soon* — Property cash flow analysis, capex budgeting, deal analysis (IRR/cap rate).
+### Landlord Financial
+*Planned* — Property cash flow analysis, capex budgeting, deal analysis.

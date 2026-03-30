@@ -1,7 +1,7 @@
 [project]
 name = "multi-project-coordinator"
 version = "0.1.0"
-description = "MCP server for managing multiple project states in Claude Code. Track dashboards, tasks, logs, and pipelines across repos. $9/mo on MCPize."
+description = "MCP server for managing multiple project states in Claude Code. Track dashboards, tasks, logs, and pipelines across repos. Free & open source."
 authors = [{name = "Mason Meredith"}]
 license = {text = "MIT"}
 readme = "README.md"

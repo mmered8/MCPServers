@@ -4,7 +4,7 @@ Exposes tools for Claude Code sessions to query business state,
 update project tracking, and enforce the close-the-loop rule across
 multiple project directories.
 
-Available on MCPize ($9/mo). Streamable-http transport.
+Free & open source. Streamable-http transport.
 """
 
 import os

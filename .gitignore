@@ -42,7 +42,12 @@ start-server.sh
 .mcp.json
 .claude/
 
+# Paid server code (private, never pushed to public repo)
+servers/grok-api-wrapper/
+
 # Internal docs (not for customers)
 multi-project-coordinator-review.md
+multi-project-coordinator-market-review.md
 BUILD_SPEC.md
 CLAUDE.md
+launch/
