@@ -44,6 +44,7 @@ start-server.sh
 
 # Paid server code (private, never pushed to public repo)
 servers/grok-api-wrapper/
+servers/project-dashboard/
 
 # Internal docs (not for customers)
 multi-project-coordinator-review.md
