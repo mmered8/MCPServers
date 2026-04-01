@@ -1,6 +1,7 @@
 """Tests for Multi-Project Coordinator MCP server."""
 
 import os
+import subprocess
 import tempfile
 from pathlib import Path
 
@@ -277,3 +278,54 @@ def test_session_close_creates_missing_changelog(setup_test_root):
     assert "Session closed" in result
     changelog = (setup_test_root / "CHANGELOG.md").read_text()
     assert "First session" in changelog
+
+
+def test_get_git_status_with_repo(setup_test_root):
+    """get_git_status should report branch, changes, and last commit for a git repo."""
+    from multi_project_coordinator.server import get_git_status
+
+    # Initialize a git repo in the test project directory
+    proj_dir = setup_test_root / "projects" / "test-project"
+    subprocess.run(["git", "init"], cwd=proj_dir, capture_output=True)
+    subprocess.run(
+        ["git", "config", "user.email", "test@test.com"],
+        cwd=proj_dir, capture_output=True,
+    )
+    subprocess.run(
+        ["git", "config", "user.name", "Test"],
+        cwd=proj_dir, capture_output=True,
+    )
+    subprocess.run(["git", "add", "."], cwd=proj_dir, capture_output=True)
+    subprocess.run(
+        ["git", "commit", "-m", "init"],
+        cwd=proj_dir, capture_output=True,
+    )
+
+    result = get_git_status("test-project")
+    assert "test-project" in result
+    assert "Branch:" in result
+    assert "Uncommitted changes: 0" in result
+    assert "Last commit:" in result
+    assert "(no commits)" not in result
+
+
+def test_get_git_status_no_repo(setup_test_root, tmp_path):
+    """get_git_status should handle directories that are not git repos."""
+    from multi_project_coordinator.server import get_git_status
+    import multi_project_coordinator.server as srv
+
+    # Create an isolated project outside any git repo
+    isolated = tmp_path / "isolated"
+    isolated.mkdir()
+    projects = isolated / "projects"
+    projects.mkdir()
+    proj = projects / "no-git"
+    proj.mkdir()
+    (proj / "STATUS.md").write_text("# No Git\n- Health: GREY\n", encoding="utf-8")
+
+    srv.PROJECTS_ROOT = isolated
+    srv.PROJECTS_DIR = projects
+    srv.IDEATION_DIR = isolated / "ideation"
+
+    result = get_git_status("no-git")
+    assert "not inside a git repository" in result

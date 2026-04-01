@@ -9,6 +9,7 @@ Free & open source. Streamable-http transport.
 
 import os
 import re
+import subprocess
 from datetime import datetime
 from pathlib import Path
 
@@ -422,6 +423,56 @@ def session_close(project: str, summary: str, changed: str, next_steps: str) -> 
     return (
         f"Session closed for '{project}' at {_timestamp()}.\n"
         f"Updated: {project}/LOG.md, CHANGELOG.md, STATUS_SNAPSHOT.md"
+    )
+
+
+@mcp.tool()
+def get_git_status(project: str) -> str:
+    """Get git repository status for a project.
+
+    Reports branch name, count of uncommitted changes, and last commit
+    datetime. Useful for monitoring repo health across your portfolio.
+
+    Args:
+        project: Project folder name
+    """
+    project_dir = _valid_project(project)
+
+    def _git(args: list[str]) -> tuple[bool, str]:
+        try:
+            result = subprocess.run(
+                ["git"] + args,
+                cwd=project_dir,
+                capture_output=True,
+                text=True,
+                timeout=10,
+            )
+            return result.returncode == 0, result.stdout.strip()
+        except FileNotFoundError:
+            return False, "git is not installed"
+        except subprocess.TimeoutExpired:
+            return False, "git command timed out"
+
+    # Check if directory is inside a git repo
+    ok, toplevel = _git(["rev-parse", "--show-toplevel"])
+    if not ok:
+        return f"'{project}' is not inside a git repository."
+
+    ok, branch = _git(["branch", "--show-current"])
+    branch_name = branch if ok and branch else "(detached HEAD)"
+
+    ok, porcelain = _git(["status", "--porcelain"])
+    modified_count = len(porcelain.splitlines()) if ok and porcelain else 0
+
+    ok, last_commit = _git(["log", "-1", "--format=%ci"])
+    last_commit_str = last_commit if ok and last_commit else "(no commits)"
+
+    return (
+        f"Project: {project}\n"
+        f"Repo root: {toplevel}\n"
+        f"Branch: {branch_name}\n"
+        f"Uncommitted changes: {modified_count}\n"
+        f"Last commit: {last_commit_str}"
     )
 
 
