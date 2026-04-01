@@ -39,7 +39,7 @@ def _init_paths() -> None:
     PROJECTS_DIR = PROJECTS_ROOT / "projects"
     IDEATION_DIR = PROJECTS_ROOT / "ideation"
 
-mcp = FastMCP("multi-project-coordinator")
+mcp = FastMCP("multi-project-coordinator", port=8000)
 
 
 # ── Helpers ──────────────────────────────────────────────
