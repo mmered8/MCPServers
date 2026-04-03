@@ -7,11 +7,16 @@ multiple project directories.
 Free & open source. Streamable-http transport.
 """
 
+import json
+import logging
 import os
 import re
 import subprocess
+import urllib.request
 from datetime import datetime
 from pathlib import Path
+
+logger = logging.getLogger(__name__)
 
 from mcp.server.fastmcp import FastMCP
 
@@ -477,9 +482,34 @@ def session_close(project: str, summary: str, changed: str, next_steps: str) -> 
     snapshot_path = PROJECTS_ROOT / "STATUS_SNAPSHOT.md"
     snapshot_path.write_text(snapshot, encoding="utf-8")
 
+    # 4. Optional webhook notification
+    webhook_msg = ""
+    webhook_url = os.environ.get("WEBHOOK_URL")
+    if webhook_url:
+        payload = json.dumps({
+            "project": project,
+            "summary": summary,
+            "changed": changed,
+            "next_steps": next_steps,
+            "timestamp": datetime.now().isoformat(timespec="seconds"),
+        }).encode("utf-8")
+        try:
+            req = urllib.request.Request(
+                webhook_url,
+                data=payload,
+                headers={"Content-Type": "application/json"},
+                method="POST",
+            )
+            urllib.request.urlopen(req, timeout=10)
+            webhook_msg = f"\nWebhook sent to {webhook_url}"
+        except Exception as exc:
+            logger.warning("Webhook failed: %s", exc)
+            webhook_msg = f"\nWebhook failed (non-fatal): {exc}"
+
     return (
         f"Session closed for '{project}' at {_timestamp()}.\n"
         f"Updated: {project}/LOG.md, CHANGELOG.md, STATUS_SNAPSHOT.md"
+        f"{webhook_msg}"
     )
 
 

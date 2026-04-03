@@ -280,6 +280,69 @@ def test_session_close_creates_missing_changelog(setup_test_root):
     assert "First session" in changelog
 
 
+def test_session_close_webhook(setup_test_root, monkeypatch):
+    """session_close should POST JSON to WEBHOOK_URL when set."""
+    import json
+    from unittest.mock import MagicMock, patch
+    from multi_project_coordinator.server import session_close
+
+    monkeypatch.setenv("WEBHOOK_URL", "https://hooks.example.com/test")
+
+    mock_response = MagicMock()
+    mock_response.status = 200
+    mock_response.__enter__ = lambda s: s
+    mock_response.__exit__ = MagicMock(return_value=False)
+
+    with patch("multi_project_coordinator.server.urllib.request.urlopen") as mock_urlopen:
+        mock_urlopen.return_value = mock_response
+        result = session_close(
+            "test-project", "Webhook test", "server.py", "More tests"
+        )
+
+    assert "Webhook sent" in result
+    # Verify the request was made with correct payload
+    call_args = mock_urlopen.call_args
+    req = call_args[0][0]
+    assert req.full_url == "https://hooks.example.com/test"
+    assert req.get_header("Content-type") == "application/json"
+    payload = json.loads(req.data)
+    assert payload["project"] == "test-project"
+    assert payload["summary"] == "Webhook test"
+    assert payload["changed"] == "server.py"
+    assert payload["next_steps"] == "More tests"
+    assert "timestamp" in payload
+
+
+def test_session_close_webhook_not_set(setup_test_root, monkeypatch):
+    """session_close should skip webhook silently when WEBHOOK_URL not set."""
+    from multi_project_coordinator.server import session_close
+
+    monkeypatch.delenv("WEBHOOK_URL", raising=False)
+    result = session_close(
+        "test-project", "No webhook", "files", "steps"
+    )
+    assert "Session closed" in result
+    assert "Webhook" not in result
+
+
+def test_session_close_webhook_failure(setup_test_root, monkeypatch):
+    """session_close should not fail if webhook POST errors."""
+    from unittest.mock import patch
+    from urllib.error import URLError
+    from multi_project_coordinator.server import session_close
+
+    monkeypatch.setenv("WEBHOOK_URL", "https://hooks.example.com/broken")
+
+    with patch("multi_project_coordinator.server.urllib.request.urlopen") as mock_urlopen:
+        mock_urlopen.side_effect = URLError("Connection refused")
+        result = session_close(
+            "test-project", "Fail gracefully", "files", "steps"
+        )
+
+    assert "Session closed" in result
+    assert "Webhook failed (non-fatal)" in result
+
+
 def test_create_task_default_section(setup_test_root):
     """create_task should add a task under ## Active by default."""
     from multi_project_coordinator.server import create_task
