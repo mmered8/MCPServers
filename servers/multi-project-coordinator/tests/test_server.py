@@ -280,6 +280,68 @@ def test_session_close_creates_missing_changelog(setup_test_root):
     assert "First session" in changelog
 
 
+def test_create_task_default_section(setup_test_root):
+    """create_task should add a task under ## Active by default."""
+    from multi_project_coordinator.server import create_task
+    result = create_task("test-project", "Implement login page")
+    assert "Added task" in result
+    assert "Active" in result
+
+    tasks = (setup_test_root / "projects" / "test-project" / "TASKS.md").read_text()
+    assert "- [ ] Implement login page" in tasks
+    assert "added" in tasks.lower()
+
+
+def test_create_task_specific_section(setup_test_root):
+    """create_task should add a task under a specified section."""
+    from multi_project_coordinator.server import create_task
+
+    # Add a Backlog section first
+    tasks_file = setup_test_root / "projects" / "test-project" / "TASKS.md"
+    content = tasks_file.read_text()
+    tasks_file.write_text(content + "\n## Backlog\n\n", encoding="utf-8")
+
+    result = create_task("test-project", "Research caching", "Backlog")
+    assert "Added task" in result
+    assert "Backlog" in result
+
+    tasks = tasks_file.read_text()
+    assert "Research caching" in tasks
+
+
+def test_create_task_duplicate(setup_test_root):
+    """create_task should reject duplicate tasks."""
+    from multi_project_coordinator.server import create_task
+    result = create_task("test-project", "Build feature A")
+    assert "already exists" in result
+
+
+def test_create_task_invalid_section(setup_test_root):
+    """create_task should report available sections when target not found."""
+    from multi_project_coordinator.server import create_task
+    result = create_task("test-project", "Some task", "Nonexistent")
+    assert "not found" in result
+    assert "Active" in result  # Should list available sections
+
+
+def test_create_task_creates_missing_tasks_file(setup_test_root):
+    """create_task should create TASKS.md if it doesn't exist."""
+    from multi_project_coordinator.server import create_task
+
+    # Remove TASKS.md from another-project to test creation
+    tasks_file = setup_test_root / "projects" / "another-project" / "TASKS.md"
+    tasks_file.unlink()
+    assert not tasks_file.exists()
+
+    result = create_task("another-project", "Bootstrap project")
+    assert "Added task" in result
+    assert tasks_file.exists()
+
+    content = tasks_file.read_text()
+    assert "Bootstrap project" in content
+    assert "## Active" in content
+
+
 def test_get_git_status_with_repo(setup_test_root):
     """get_git_status should report branch, changes, and last commit for a git repo."""
     from multi_project_coordinator.server import get_git_status
