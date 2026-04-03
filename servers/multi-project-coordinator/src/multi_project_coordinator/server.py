@@ -312,6 +312,63 @@ def update_task(project: str, task: str, status: str) -> str:
 
 
 @mcp.tool()
+def create_task(project: str, task: str, section: str = "Active") -> str:
+    """Add a new task to a project's TASKS.md.
+
+    Appends a `- [ ] task` line under the specified section heading.
+    Skips if an identical task already exists.
+
+    Args:
+        project: Project folder name
+        task: Task description text
+        section: Section heading to add under (default: 'Active')
+    """
+    project_dir = _valid_project(project)
+    tasks_file = project_dir / "TASKS.md"
+
+    if not tasks_file.exists():
+        title = project.replace("-", " ").title()
+        tasks_file.write_text(
+            f"# {title} — Tasks\n\n## Active\n\n## Completed\n\n",
+            encoding="utf-8",
+        )
+
+    content = tasks_file.read_text(encoding="utf-8")
+
+    # Check for duplicate
+    if task in content:
+        return f"Task already exists in {project}/TASKS.md: '{task}'"
+
+    lines = content.splitlines()
+    target = f"## {section}"
+    insert_idx = None
+    for i, line in enumerate(lines):
+        if line.strip().lower() == target.lower():
+            # Find the end of this section (next ## or end of file)
+            insert_idx = i + 1
+            # Skip blank lines after section header
+            while insert_idx < len(lines) and lines[insert_idx].strip() == "":
+                insert_idx += 1
+            break
+
+    if insert_idx is None:
+        return (
+            f"Section '## {section}' not found in {project}/TASKS.md. "
+            f"Available sections: "
+            + ", ".join(
+                line.strip()
+                for line in lines
+                if line.startswith("## ")
+            )
+        )
+
+    new_line = f"- [ ] {task} — _added {_datestamp()}_"
+    lines.insert(insert_idx, new_line)
+    tasks_file.write_text("\n".join(lines), encoding="utf-8")
+    return f"Added task to {project}/TASKS.md under '## {section}': {task}"
+
+
+@mcp.tool()
 def search_context(query: str) -> str:
     """Full-text search across all markdown files in every project.
 
