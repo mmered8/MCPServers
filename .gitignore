@@ -36,19 +36,6 @@ htmlcov/
 # Build
 *.whl
 
-# Local-only (hardcoded paths, not portable)
-start-server.bat
-start-server.sh
-.mcp.json
+# Local-only (personal workspace, not portfolio content)
 .claude/
-
-# Paid server code (private, never pushed to public repo)
-servers/grok-api-wrapper/
-servers/project-dashboard/
-
-# Internal docs (not for customers)
-multi-project-coordinator-review.md
-multi-project-coordinator-market-review.md
-BUILD_SPEC.md
-CLAUDE.md
-launch/
+.mcp.json
