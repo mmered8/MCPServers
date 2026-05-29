@@ -8,6 +8,15 @@ Reference implementations of MCP (Model Context Protocol) servers for project co
 
 This is a portfolio / reference repo. The code is meant to be read, forked, and adapted. It's not trying to be a generic library — it's a concrete, working example of a well-structured MCP server you can actually run.
 
+## Workspace Philosophy: Lean by Default
+
+A deliberate principle across this workspace — surface it before any add or refactor.
+
+- **Delete is the default before adding.** Always ask first whether something can be removed instead of added.
+- **If adding, add as lean as possible.** Smallest viable change. No speculative scaffolding, no parallel implementations.
+- **Adding is dangerous.** New code, new branches, and new files can break the system or fragment the codebase across this multi-repo workspace. Branch and code drift is the failure mode we are actively avoiding.
+- **Don't lose track of what you add.** If it's worth adding, it's worth knowing where it lives.
+
 ## Tech Stack
 
 - **Python** ≥3.10
