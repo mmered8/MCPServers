@@ -31,8 +31,10 @@ A deliberate principle across this workspace — surface it before any add or re
 MCPServers/
 ├── README.md                          # Public-facing overview
 ├── CLAUDE.md                          # You are here
+├── CHANGELOG.md                       # Reverse-chronological session history
 ├── .gitignore                         # Standard Python template
 ├── start-server.bat / .sh             # Convenience launchers
+├── docs/                              # mcpize-listing.md and other marketplace/registry copy
 └── servers/
     └── multi-project-coordinator/
         ├── src/multi_project_coordinator/
@@ -40,7 +42,7 @@ MCPServers/
         │   ├── __main__.py            # `python -m multi_project_coordinator`
         │   └── server.py              # FastMCP instance + all 10 tools
         ├── tests/
-        │   └── test_server.py         # Integration tests (~20)
+        │   └── test_server.py         # Integration tests (29, 456 lines)
         ├── pyproject.toml              # uv package config + metadata
         ├── LICENSE                     # MIT
         ├── server.json                 # MCP Registry submission metadata
@@ -100,3 +102,15 @@ Tests use `tmp_path` fixtures to create an isolated project directory per test, 
 ## License
 
 MIT. Fork freely, adapt freely, attribution appreciated but not required.
+
+## Pathing Policy — No Absolute Paths (workspace standard)
+
+Never hardcode absolute paths (`C:\Users\...`, `/mnt/c/...`, `/Users/...`). All
+references — in code, configs (`.mcp.json`, hooks), scripts, and docs — must use:
+- paths relative to the repo or current file, or
+- the `WORKSPACE_ROOT` environment variable for cross-repo references, or
+- env vars / installed entry points (console scripts) for tools.
+
+Absolute paths are how this workspace got tangled; keeping them out keeps every repo
+portable and the workspace reorganizable. The only sanctioned exception is Windows Task
+Scheduler actions (an OS constraint) — keep those centralized and minimal.
