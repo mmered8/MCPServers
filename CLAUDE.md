@@ -1,3 +1,7 @@
+> **📍 Workspace relocated to `C:\GitHub` (out of OneDrive) — 2026-06-21.**
+> Repos now live at `C:\GitHub\<tier>\<repo>` with `WORKSPACE_ROOT=C:\GitHub`. The old
+> `C:\Users\mason\OneDrive\Documents\GitHub` path is retired — reference paths via
+> `WORKSPACE_ROOT` / repo-relative, never the OneDrive path.
 # CLAUDE.md
 
 Guidance for Claude Code and other AI coding tools working on this repository.
@@ -8,14 +12,7 @@ Reference implementations of MCP (Model Context Protocol) servers for project co
 
 This is a portfolio / reference repo. The code is meant to be read, forked, and adapted. It's not trying to be a generic library — it's a concrete, working example of a well-structured MCP server you can actually run.
 
-## Workspace Philosophy: Lean by Default
-
-A deliberate principle across this workspace — surface it before any add or refactor.
-
-- **Delete is the default before adding.** Always ask first whether something can be removed instead of added.
-- **If adding, add as lean as possible.** Smallest viable change. No speculative scaffolding, no parallel implementations.
-- **Adding is dangerous.** New code, new branches, and new files can break the system or fragment the codebase across this multi-repo workspace. Branch and code drift is the failure mode we are actively avoiding.
-- **Don't lose track of what you add.** If it's worth adding, it's worth knowing where it lives.
+> **Workspace Philosophy (Lean by Default)** and **Pathing Policy (Portable Paths)** live in the root [`CLAUDE.md`](../../CLAUDE.md) — auto-loaded every session; not repeated here.
 
 ## Tech Stack
 
@@ -102,15 +99,3 @@ Tests use `tmp_path` fixtures to create an isolated project directory per test, 
 ## License
 
 MIT. Fork freely, adapt freely, attribution appreciated but not required.
-
-## Pathing Policy — No Absolute Paths (workspace standard)
-
-Never hardcode absolute paths (`C:\Users\...`, `/mnt/c/...`, `/Users/...`). All
-references — in code, configs (`.mcp.json`, hooks), scripts, and docs — must use:
-- paths relative to the repo or current file, or
-- the `WORKSPACE_ROOT` environment variable for cross-repo references, or
-- env vars / installed entry points (console scripts) for tools.
-
-Absolute paths are how this workspace got tangled; keeping them out keeps every repo
-portable and the workspace reorganizable. The only sanctioned exception is Windows Task
-Scheduler actions (an OS constraint) — keep those centralized and minimal.
