@@ -2,8 +2,6 @@
 
 import os
 import subprocess
-import tempfile
-from pathlib import Path
 
 import pytest
 
@@ -80,7 +78,6 @@ def setup_test_root(tmp_path):
     os.environ["PROJECTS_ROOT"] = str(tmp_path)
 
     # Re-import to pick up env var
-    import importlib
     import multi_project_coordinator.server as srv
     srv.PROJECTS_ROOT = tmp_path
     srv.PROJECTS_DIR = tmp_path / "projects"
